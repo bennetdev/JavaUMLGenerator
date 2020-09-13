@@ -8,6 +8,22 @@ Writer({
     "Class2": {
         "variables": ["var3", "var4"],
         "methods": ["method3", "method4"]
+    },
+    "Class3": {
+        "variables": ["var5", "var6"],
+        "methods": ["method5", "method6"]
+    },
+    "Class4": {
+        "variables": ["var5", "var6"],
+        "methods": ["method5", "method6"]
+    },
+    "Class5": {
+        "variables": ["var5", "var6"],
+        "methods": ["method5", "method6"]
+    },
+    "Class6": {
+        "variables": ["var5", "var6"],
+        "methods": ["method5", "method6"]
     }
 },
 ).write_to_pdf()
