@@ -10,9 +10,9 @@ class MainWindow(Frame):
         outercanvas.pack(expand=Y, fill=BOTH)
         innerframe = Frame(self)
         innerframe.pack()
-        innercanvas = Canvas(innerframe, width=100, height=50)
+        innercanvas = Canvas(self, width=100, height=50)
 
-        outercanvas.create_window(50, 25, anchor=NW, window=innerframe)
+        outercanvas.create_window(50, 25, anchor=NW, window=innercanvas)
 
         innercanvas.create_text(10, 10, anchor=NW, text="Hello")
 

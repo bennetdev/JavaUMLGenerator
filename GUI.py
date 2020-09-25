@@ -18,19 +18,22 @@ class View:
         master.title("UML Generator")
         self.frame = tk.Frame(self.master, width=width, height=height)
         self.frame.pack(expand=True)
-        self.canvas = tk.Canvas(self.frame, width=400, height=400, scrollregion=(0, 0, 0, 500), bg="#ffffff")
+        self.canvas = tk.Canvas(self.frame, width=400, height=400, bg="#ffffff")
         self.canvas.pack()
 
         uml = UMLKlasse(
             Klasse("Klasse1", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
-            self.master)
-        self.canvas.create_window(0,0,anchor="nw",window=uml)
+            self.frame)
+
+        uml.pack()
+        uml_window = self.canvas.create_window(100,100,anchor="nw",window=uml)
+        uml.create_single_class_rect(200, 100)
 
         uml = UMLKlasse(
-            Klasse("Klasse1", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
+            Klasse("Klasse2", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
             self.master)
+        uml_window = self.canvas.create_window(100, 300, anchor="nw", window=uml)
         uml.create_single_class_rect(200, 100)
-        uml.delete_drawed()
 
 
 root = tk.Tk()
