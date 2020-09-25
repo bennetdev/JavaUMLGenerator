@@ -1,11 +1,10 @@
 import tkinter as tk
 
 
-class UMLKlasse(tk.Frame):
+class UMLKlasse(tk.Canvas):
     def __init__(self, klasse, canvas):
-        tk.Frame.__init__(self, canvas)
+        tk.Canvas.__init__(canvas, width=100, height=200)
         self.klasse = klasse
-        self.canvas = canvas
         self.drawed = []
 
     def delete_drawed(self):

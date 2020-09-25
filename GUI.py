@@ -23,11 +23,12 @@ class View:
 
         uml = UMLKlasse(
             Klasse("Klasse1", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
-            self.canvas)
-        uml.create_single_class_rect(50, 100)
+            self.master)
+        self.canvas.create_window(0,0,anchor="nw",window=uml)
+
         uml = UMLKlasse(
             Klasse("Klasse1", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
-            self.canvas)
+            self.master)
         uml.create_single_class_rect(200, 100)
         uml.delete_drawed()
 
