@@ -4,6 +4,7 @@ from tkinter import filedialog
 import sys
 import threading
 from UMLKlasse import UMLKlasse
+from Klasse import Klasse
 
 
 class View:
@@ -19,11 +20,16 @@ class View:
         self.frame.pack(expand=True)
         self.canvas = tk.Canvas(self.frame, width=400, height=400, scrollregion=(0, 0, 0, 500), bg="#ffffff")
         self.canvas.pack()
-        uml = UMLKlasse({
-            "variables": ["String var5", "int var6", "double var7"],
-            "methods": ["String method5", "void method6"]
-        }, self.canvas, "Klasse1")
-        uml.create_single_class_rect(100, 100)
+
+        uml = UMLKlasse(
+            Klasse("Klasse1", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
+            self.canvas)
+        uml.create_single_class_rect(50, 100)
+        uml = UMLKlasse(
+            Klasse("Klasse1", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
+            self.canvas)
+        uml.create_single_class_rect(200, 100)
+        uml.delete_drawed()
 
 
 root = tk.Tk()
