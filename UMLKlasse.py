@@ -15,7 +15,7 @@ class UMLKlasse(tk.Canvas):
     def draw(self):
         pass
 
-    def create_single_class_rect(self, offset_x, offset_y):
+    def create_single_class_rect(self):
         self.create_text(2, 0, anchor="nw", text=self.klasse.name)
         self.create_line(0, 25, 150, 25)
         # value for start of line separating variables and methods

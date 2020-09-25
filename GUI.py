@@ -27,13 +27,19 @@ class View:
 
         uml.pack()
         uml_window = self.canvas.create_window(100,100,anchor="nw",window=uml)
-        uml.create_single_class_rect(200, 100)
-
+        uml.create_single_class_rect()
+        self.move_uml_klasse(uml,uml_window,10,10)
         uml = UMLKlasse(
             Klasse("Klasse2", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
             self.master)
         uml_window = self.canvas.create_window(100, 300, anchor="nw", window=uml)
-        uml.create_single_class_rect(200, 100)
+        uml.create_single_class_rect()
+
+    def move_uml_klasse(self, uml, uml_window, x, y):
+        self.canvas.delete(uml_window)
+        self.canvas.create_window(x,y, anchor="nw", window=uml)
+
+
 
 
 root = tk.Tk()
