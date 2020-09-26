@@ -1,3 +1,6 @@
 from tkinter import *
 from math import sqrt
-print(sqrt(abs(100-50) ** 2 + abs(50-25) ** 2))
+if ("public" or "private") in "private":
+    print("true")
+else:
+    print("public" or "private")

@@ -6,7 +6,7 @@ import threading
 from UMLKlasse import UMLKlasse
 from Klasse import Klasse
 from math import sqrt
-
+from reader import Reader
 
 class View:
     def __init__(self, master, width, height):
@@ -17,25 +17,24 @@ class View:
         self.display_size_index = -1
         self.uml_to_drag = None
         self.uml_klassen = []
-
+        self.reader = Reader("C:\\Users\\Bennet\\Desktop\\Java\\Projekte\\NetwerkTest\\")
         master.title("UML Generator")
+        self.master.resizable(False, False)
         self.frame = tk.Frame(self.master, width=width, height=height)
         self.frame.pack(expand=True, fill="both")
         self.canvas = tk.Canvas(self.frame, width=1200, height=800, bg="#ffffff")
         self.canvas.pack()
         self.master.bind("<ButtonPress-1>", self.drag_start)
         self.master.bind("<ButtonRelease-1>", self.drag_release)
+        self.display_all_umls()
 
-        uml = UMLKlasse(
-            Klasse("Klasse1", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
-            self.frame)
-        self.uml_klassen.append(uml)
-        self.display_uml(uml, 100, 100)
-        uml = UMLKlasse(
-            Klasse("Klasse2", ["String method5", "void method6"], ["String var5", "int var6", "double var7"]),
-            self.frame)
-        self.uml_klassen.append(uml)
-        self.display_uml(uml, 300, 300)
+
+
+    def display_all_umls(self):
+        for index, uml in enumerate(self.reader.uml_klassen):
+            uml_klasse = UMLKlasse(uml, self.canvas)
+            self.uml_klassen.append(uml_klasse)
+            self.display_uml(uml_klasse, 100 * index, 100 * (index // 5))
 
     def display_uml(self, uml, x, y):
         uml.set_position(x, y)
