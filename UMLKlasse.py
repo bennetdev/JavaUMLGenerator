@@ -7,6 +7,9 @@ class UMLKlasse(tk.Canvas):
                            highlightthickness=0)
         self.klasse = klasse
         self.drawed = []
+        self.window = None
+        self.x = 0
+        self.y = 0
 
     def delete_drawed(self):
         for drawed in self.drawed:
@@ -35,3 +38,7 @@ class UMLKlasse(tk.Canvas):
             self.create_text(2, rectangle_end_y, text=method_name, anchor="w")
         # create rectangle for class in specific size
         self.create_rectangle(0, 0, 150, rectangle_end_y + 10)
+
+    def set_position(self, x, y):
+        self.x = x
+        self.y = y
