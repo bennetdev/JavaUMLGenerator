@@ -3,13 +3,14 @@ import tkinter as tk
 
 class UMLKlasse(tk.Canvas):
     def __init__(self, klasse, canvas):
-        tk.Canvas.__init__(self, master=canvas, width=151, height=200, bg="#ffffff", bd=0, relief="ridge",
-                           highlightthickness=0)
         self.klasse = klasse
         self.drawed = []
         self.window = None
         self.x = 0
         self.y = 0
+        tk.Canvas.__init__(self, master=canvas, width=151, height=self.get_min_canvas_height() + 1, bg="#ffffff", bd=0,
+                           relief="ridge",
+                           highlightthickness=0)
 
     def delete_drawed(self):
         for drawed in self.drawed:
@@ -17,6 +18,12 @@ class UMLKlasse(tk.Canvas):
 
     def draw(self):
         pass
+
+    def get_min_canvas_height(self):
+        height = 25 + ((10 + 15 * (len(self.klasse.variables) - 1)) if len(self.klasse.variables) > 0 else 0) + (
+            (20 + 15 * (len(self.klasse.methods) - 1)) if len(self.klasse.methods) > 0 else 0) + 10
+        print(self.klasse.name, height)
+        return height
 
     def create_single_class_rect(self):
         self.create_text(2, 0, anchor="nw", text=self.klasse.name)
@@ -42,3 +49,6 @@ class UMLKlasse(tk.Canvas):
     def set_position(self, x, y):
         self.x = x
         self.y = y
+
+    def draw_refference(self, uml1, uml2):
+        pass

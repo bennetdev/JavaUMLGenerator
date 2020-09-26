@@ -25,7 +25,7 @@ class Reader:
                             methods.append(self.strip_method(line))
                         else:
                             variables.append(self.strip_variable(line))
-        return Klasse(filename.split("."), methods, variables)
+        return Klasse(filename.split(".")[0], methods, variables)
 
     def strip_method(self, methodname):
         return methodname.strip().split("(")[0] + "()"
