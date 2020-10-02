@@ -5,6 +5,7 @@ class UMLKlasse(tk.Canvas):
     def __init__(self, klasse, canvas):
         self.klasse = klasse
         self.drawed = []
+        self.references = []
         self.window = None
         self.x = 0
         self.y = 0
@@ -22,7 +23,7 @@ class UMLKlasse(tk.Canvas):
     def get_min_canvas_height(self):
         height = 25 + ((10 + 15 * (len(self.klasse.variables) - 1)) if len(self.klasse.variables) > 0 else 0) + (
             (20 + 15 * (len(self.klasse.methods) - 1)) if len(self.klasse.methods) > 0 else 0) + 10
-        print(self.klasse.name, height)
+        #print(self.klasse.name, height)
         return height
 
     def create_single_class_rect(self):
@@ -41,7 +42,7 @@ class UMLKlasse(tk.Canvas):
         # iterate over method-names in current class
         for method_index, method_name in enumerate(self.klasse.methods):
             rectangle_end_y = (separator_y + 20) + 15 * method_index
-            print(rectangle_end_y)
+            #print(rectangle_end_y)
             self.create_text(2, rectangle_end_y, text=method_name, anchor="w")
         # create rectangle for class in specific size
         self.create_rectangle(0, 0, 150, rectangle_end_y + 10)
@@ -50,5 +51,5 @@ class UMLKlasse(tk.Canvas):
         self.x = x
         self.y = y
 
-    def draw_refference(self, uml1, uml2):
-        pass
+    def get_center_y(self):
+        return self.y + (self.get_min_canvas_height()+1)/2
