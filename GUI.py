@@ -19,6 +19,7 @@ class View:
         self.uml_to_drag = None
         self.uml_klassen = []
         self.reference_arrows = []
+        self.inheritance_arrows = []
         self.reader = Reader("C:\\Users\\Bennet\\Desktop\\Java\\Projekte\\NetwerkTest\\")
         master.title("UML Generator")
         self.master.resizable(False, False)
@@ -36,7 +37,7 @@ class View:
         for index, uml in enumerate(self.reader.uml_klassen):
             uml_klasse = UMLKlasse(uml, self.canvas)
             self.uml_klassen.append(uml_klasse)
-            self.display_uml(uml_klasse, 250 * index,150+ 250 * (index // 5))
+            self.display_uml(uml_klasse, 250 * index, 150 + 250 * (index // 5))
 
     def display_uml(self, uml, x, y):
         uml.set_position(x, y)
@@ -68,9 +69,13 @@ class View:
     def draw_all_reference_arrows(self):
         for arrow in self.reference_arrows:
             self.canvas.delete(arrow)
+        for arrow in self.inheritance_arrows:
+            self.canvas.delete(arrow)
         for uml_klasse in self.uml_klassen:
             for reference_uml in uml_klasse.references:
                 self.draw_reference_arrow(uml_klasse, reference_uml)
+            if uml_klasse.motherclass is not None:
+                self.draw_inheritance_arrow(uml_klasse, uml_klasse.motherclass)
 
     def draw_reference_arrow(self, uml_klasse1, uml_klasse2):
         x2, y2 = uml_klasse2.get_nearest_center_pos(uml_klasse1.x, uml_klasse1.get_center_y())
@@ -78,11 +83,20 @@ class View:
         self.reference_arrows.append(
             self.canvas.create_line(uml_klasse1.x, uml_klasse1.get_center_y(), x2, y2, dash=(2, 1), arrow=tk.LAST))
 
+    def draw_inheritance_arrow(self, uml_klasse1, uml_klasse2):
+        print("INEZWGEZIU")
+        x2, y2 = uml_klasse2.get_nearest_center_pos(uml_klasse1.x, uml_klasse1.get_center_y())
+        print(uml_klasse2.klasse.name, x2, y2)
+        self.inheritance_arrows.append(
+            self.canvas.create_line(uml_klasse1.x, uml_klasse1.get_center_y(), x2, y2, arrow=tk.LAST))
+
     def create_references(self):
         for uml_klasse in self.uml_klassen:
             for uml_klasse2 in self.uml_klassen:
                 if uml_klasse2.klasse.name in uml_klasse.klasse.reference_names:
                     uml_klasse.references.append(uml_klasse2)
+                if uml_klasse2.klasse.name == uml_klasse.klasse.motherclass:
+                    uml_klasse.motherclass = uml_klasse2
 
 
 root = tk.Tk()

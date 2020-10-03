@@ -24,6 +24,7 @@ class Reader:
         variables = []
         methods = []
         reference_names = []
+        motherclass = ""
         with open(self.path + filename, "r") as file:
             for line in file:
                 if "private" in line or "public" in line:
@@ -34,13 +35,33 @@ class Reader:
                         else:
                             variables.append(self.strip_variable(line))
                         reference_names.extend(self.get_reference_names(line))
-        return Klasse(filename.split(".")[0], methods, variables, list(set(reference_names)))
+                    elif " extends " in line:
+                        motherclass = line.split(" extends ")[1].split(" ")[0].strip()
+        return Klasse(filename.split(".")[0], methods, variables, list(set(reference_names)), motherclass)
 
     def get_reference_names(self, line):
         return [x for x in self.classnames if x in line]
 
     def strip_method(self, methodname):
-        return methodname.strip().split("(")[0] + "()"
+        new_methodname = methodname.strip()
+        new_methodname = self.replace_visibility_indicator(new_methodname)
+        new_methodname_without_parameters = new_methodname.split("(")[0] + "( "
+        parameters = new_methodname.split("(")[1].replace(")", "").split(",")
+        for parameter in parameters:
+            new_methodname_without_parameters += self.strip_parameter(parameter) + " "
+        return new_methodname_without_parameters + ")"
 
     def strip_variable(self, variablename):
-        return variablename.strip().split(";")[0]
+        new_variablename = variablename.strip().split(";")[0].split(" ")
+        new_variablename[1], new_variablename[2] = new_variablename[2], new_variablename[1]
+        new_variablename = " ".join(new_variablename)
+        new_variablename = self.replace_visibility_indicator(new_variablename).replace(" ", " : ")
+        return new_variablename
+
+    def replace_visibility_indicator(self, indicator):
+        return indicator.replace("private ", "-").replace("public ", "+").replace("protected ", "#").replace("package ",
+                                                                                                             "~")
+    def strip_parameter(self, parameter):
+        parameter = parameter.split(" ")
+        parameter[0], parameter[1] = parameter[1], parameter[0]
+        return " : ".join(parameter)

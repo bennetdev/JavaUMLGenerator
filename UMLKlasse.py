@@ -10,6 +10,7 @@ class UMLKlasse(tk.Canvas):
         self.window = None
         self.x = 0
         self.y = 0
+        self.motherclass = None
         self.width = self.get_min_canvas_width()
         self.height = self.get_min_canvas_height()
         tk.Canvas.__init__(self, master=canvas, width=self.width+1, height=self.height, bg="#ffffff",
