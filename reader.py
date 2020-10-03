@@ -48,7 +48,9 @@ class Reader:
         new_methodname_without_parameters = new_methodname.split("(")[0] + "( "
         parameters = new_methodname.split("(")[1].replace(")", "").split(",")
         for parameter in parameters:
-            new_methodname_without_parameters += self.strip_parameter(parameter) + " "
+            print(parameters)
+            if len(parameter) >= 3:
+                new_methodname_without_parameters += self.strip_parameter(parameter) + " "
         return new_methodname_without_parameters + ")"
 
     def strip_variable(self, variablename):

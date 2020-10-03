@@ -10,9 +10,9 @@ from reader import Reader
 
 
 class View:
-    def __init__(self, master, width, height):
-        self.width = width
-        self.height = height
+    def __init__(self, master):
+        self.width = master.winfo_screenwidth()
+        self.height = master.winfo_screenheight()
         self.master = master
         self.bar_height = 100
         self.display_size_index = -1
@@ -20,12 +20,12 @@ class View:
         self.uml_klassen = []
         self.reference_arrows = []
         self.inheritance_arrows = []
-        self.reader = Reader("C:\\Users\\Bennet\\Desktop\\Java\\Projekte\\NetwerkTest\\")
+        self.reader = Reader("C:\\Users\\Bennet\\Desktop\\Java\\Projekte\\Paintball-Halle\\")
         master.title("UML Generator")
         self.master.resizable(False, False)
-        self.frame = tk.Frame(self.master, width=width, height=height)
+        self.frame = tk.Frame(self.master, width=self.width, height=self.height)
         self.frame.pack(expand=True, fill="both")
-        self.canvas = tk.Canvas(self.frame, width=1200, height=800, bg="#ffffff")
+        self.canvas = tk.Canvas(self.frame, width=self.width, height=self.height, bg="#ffffff")
         self.canvas.pack()
         self.master.bind("<ButtonPress-1>", self.drag_start)
         self.master.bind("<ButtonRelease-1>", self.drag_release)
@@ -34,10 +34,25 @@ class View:
         self.draw_all_reference_arrows()
 
     def display_all_umls(self):
+        row = 1
+        current_width = 0
+        min_row_height = 0
+        current_height = 100
         for index, uml in enumerate(self.reader.uml_klassen):
+            print(current_width, self.width)
             uml_klasse = UMLKlasse(uml, self.canvas)
+            print("w",uml_klasse.width)
+            if current_width + uml_klasse.width > self.width:
+                row += 1
+                current_width = 0
+                current_height += min_row_height
+                min_row_height = 0
+            current_width += uml_klasse.width / 2
             self.uml_klassen.append(uml_klasse)
-            self.display_uml(uml_klasse, 250 * index, 150 + 250 * (index // 5))
+            self.display_uml(uml_klasse, current_width, current_height)
+            current_width += uml_klasse.width / 2 + 2
+            if uml_klasse.height > min_row_height:
+                min_row_height = uml_klasse.height
 
     def display_uml(self, uml, x, y):
         uml.set_position(x, y)
@@ -84,7 +99,6 @@ class View:
             self.canvas.create_line(uml_klasse1.x, uml_klasse1.get_center_y(), x2, y2, dash=(2, 1), arrow=tk.LAST))
 
     def draw_inheritance_arrow(self, uml_klasse1, uml_klasse2):
-        print("INEZWGEZIU")
         x2, y2 = uml_klasse2.get_nearest_center_pos(uml_klasse1.x, uml_klasse1.get_center_y())
         print(uml_klasse2.klasse.name, x2, y2)
         self.inheritance_arrows.append(
@@ -100,5 +114,5 @@ class View:
 
 
 root = tk.Tk()
-view = View(root, 400, 400)
+view = View(root)
 root.mainloop()

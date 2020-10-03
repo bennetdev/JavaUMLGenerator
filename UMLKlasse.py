@@ -52,7 +52,7 @@ class UMLKlasse(tk.Canvas):
         rectangle_end_y = separator_y
         # iterate over method-names in current class
         for method_index, method_name in enumerate(self.klasse.methods):
-            rectangle_end_y = (separator_y + 20) + 15 * method_index
+            rectangle_end_y = (separator_y + 20) + 15 * method_index + (15 if separator_y == 0 else 0)
             # print(rectangle_end_y)
             self.create_text(2, rectangle_end_y, font=("Purisa", 9), text=method_name, anchor="w")
         # create rectangle for class in specific size
