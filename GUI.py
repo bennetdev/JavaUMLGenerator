@@ -32,17 +32,16 @@ class View:
         self.create_references()
         self.draw_all_reference_arrows()
 
-
     def display_all_umls(self):
         for index, uml in enumerate(self.reader.uml_klassen):
             uml_klasse = UMLKlasse(uml, self.canvas)
             self.uml_klassen.append(uml_klasse)
-            self.display_uml(uml_klasse, 250 * index, 250 * (index // 5))
+            self.display_uml(uml_klasse, 250 * index,150+ 250 * (index // 5))
 
     def display_uml(self, uml, x, y):
         uml.set_position(x, y)
         uml.pack()
-        uml_window = self.canvas.create_window(x, y, anchor="nw", window=uml)
+        uml_window = self.canvas.create_window(x, y, anchor="center", window=uml)
         uml.create_single_class_rect()
 
     def move_uml_klasse(self, uml, x, y):
@@ -74,7 +73,10 @@ class View:
                 self.draw_reference_arrow(uml_klasse, reference_uml)
 
     def draw_reference_arrow(self, uml_klasse1, uml_klasse2):
-        self.reference_arrows.append(self.canvas.create_line(uml_klasse1.x, uml_klasse1.get_center_y(), uml_klasse2.x, uml_klasse2.get_center_y(), dash=(2, 1), arrow=tk.LAST))
+        x2, y2 = uml_klasse2.get_nearest_center_pos(uml_klasse1.x, uml_klasse1.get_center_y())
+        print(uml_klasse2.klasse.name, x2, y2)
+        self.reference_arrows.append(
+            self.canvas.create_line(uml_klasse1.x, uml_klasse1.get_center_y(), x2, y2, dash=(2, 1), arrow=tk.LAST))
 
     def create_references(self):
         for uml_klasse in self.uml_klassen:

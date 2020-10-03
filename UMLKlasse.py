@@ -9,7 +9,10 @@ class UMLKlasse(tk.Canvas):
         self.window = None
         self.x = 0
         self.y = 0
-        tk.Canvas.__init__(self, master=canvas, width=151, height=self.get_min_canvas_height() + 1, bg="#ffffff", bd=0,
+        self.width = 151
+        self.height = self.get_min_canvas_height()
+        tk.Canvas.__init__(self, master=canvas, width=self.width, height=self.height+1, bg="#ffffff",
+                           bd=0,
                            relief="ridge",
                            highlightthickness=0)
 
@@ -23,7 +26,7 @@ class UMLKlasse(tk.Canvas):
     def get_min_canvas_height(self):
         height = 25 + ((10 + 15 * (len(self.klasse.variables) - 1)) if len(self.klasse.variables) > 0 else 0) + (
             (20 + 15 * (len(self.klasse.methods) - 1)) if len(self.klasse.methods) > 0 else 0) + 10
-        #print(self.klasse.name, height)
+        # print(self.klasse.name, height)
         return height
 
     def create_single_class_rect(self):
@@ -42,7 +45,7 @@ class UMLKlasse(tk.Canvas):
         # iterate over method-names in current class
         for method_index, method_name in enumerate(self.klasse.methods):
             rectangle_end_y = (separator_y + 20) + 15 * method_index
-            #print(rectangle_end_y)
+            # print(rectangle_end_y)
             self.create_text(2, rectangle_end_y, text=method_name, anchor="w")
         # create rectangle for class in specific size
         self.create_rectangle(0, 0, 150, rectangle_end_y + 10)
@@ -51,5 +54,18 @@ class UMLKlasse(tk.Canvas):
         self.x = x
         self.y = y
 
+    def get_nearest_center_pos(self, x, y):
+        left = (self.x - self.width / 2, self.get_center_y())
+        top = (self.get_center_x(), self.y + self.height / 2)
+        right = (self.x + self.width / 2, self.get_center_y())
+        bottom = (self.get_center_x(), self.y - self.height / 2)
+        centers = [left, top, right, bottom]
+        distances = [abs(x-side_x) ** 2 + abs(side_y-y) ** 2 for side_x, side_y in centers]
+        #print(self.klasse.name, centers)
+        return centers[distances.index(min(distances))]
+
+    def get_center_x(self):
+        return self.x
+
     def get_center_y(self):
-        return self.y + (self.get_min_canvas_height()+1)/2
+        return self.y
