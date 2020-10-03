@@ -1,12 +1,9 @@
 import tkinter as tk
-from tkinter import *
-from tkinter import filedialog
-import sys
-import threading
 from UMLKlasse import UMLKlasse
-from Klasse import Klasse
 from math import sqrt
 from reader import Reader
+from tkinter import filedialog
+import sys
 
 
 class View:
@@ -20,18 +17,29 @@ class View:
         self.uml_klassen = []
         self.reference_arrows = []
         self.inheritance_arrows = []
-        self.reader = Reader("C:\\Users\\Bennet\\Desktop\\Java\\Projekte\\Paintball-Halle\\")
+        self.reader = None
         master.title("UML Generator")
         self.master.resizable(False, False)
         self.frame = tk.Frame(self.master, width=self.width, height=self.height)
         self.frame.pack(expand=True, fill="both")
         self.canvas = tk.Canvas(self.frame, width=self.width, height=self.height, bg="#ffffff")
         self.canvas.pack()
+        self.menu = tk.Menu(self.master)
+        self.menu.add_command(label="Pick Folder", command=self.pick_folder)
+        self.master.config(menu=self.menu)
+
+    def start(self):
         self.master.bind("<ButtonPress-1>", self.drag_start)
         self.master.bind("<ButtonRelease-1>", self.drag_release)
         self.display_all_umls()
         self.create_references()
         self.draw_all_reference_arrows()
+
+    def pick_folder(self):
+        f = filedialog.askdirectory()
+        if f != "":
+            self.reader = Reader(f+"/")
+            self.start()
 
     def display_all_umls(self):
         row = 1
@@ -41,7 +49,7 @@ class View:
         for index, uml in enumerate(self.reader.uml_klassen):
             print(current_width, self.width)
             uml_klasse = UMLKlasse(uml, self.canvas)
-            print("w",uml_klasse.width)
+            print("w", uml_klasse.width)
             if current_width + uml_klasse.width > self.width:
                 row += 1
                 current_width = 0

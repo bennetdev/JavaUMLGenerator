@@ -29,7 +29,7 @@ class UMLKlasse(tk.Canvas):
         font = tkFont.Font(family="Purisa", size=9)
         all_displayed_text = self.klasse.methods.copy()
         all_displayed_text.extend(self.klasse.variables)
-        return max([font.measure(text) for text in all_displayed_text])+3
+        return max([font.measure(text) for text in all_displayed_text])+3 if all_displayed_text else 100
 
     def get_min_canvas_height(self):
         height = 25 + ((10 + 15 * (len(self.klasse.variables) - 1)) if len(self.klasse.variables) > 0 else 0) + (
