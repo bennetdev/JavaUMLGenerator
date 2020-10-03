@@ -4,4 +4,3 @@ class Klasse:
         self.methods = methods
         self.variables = variables
         self.reference_names = reference_names
-        print(self.reference_names)
