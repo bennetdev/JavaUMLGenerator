@@ -2,6 +2,7 @@ import tkinter as tk
 from UMLKlasse import UMLKlasse
 from reader import Reader
 from tkinter import filedialog
+import json
 
 
 # Tkinter window to display whole UML-Chart
@@ -28,15 +29,34 @@ class View:
         # add menu bar
         self.menu = tk.Menu(self.master)
         self.menu.add_command(label="Pick Folder", command=self.pick_folder)
+        self.menu.add_command(label="Save", command=self.save_current_state)
+        self.menu.add_command(label="Load", command=self.load_positions)
         self.master.config(menu=self.menu)
 
     # create all umls and add drag feature
-    def start(self):
-        self.master.bind("<ButtonPress-1>", self.drag_start)
-        self.master.bind("<ButtonRelease-1>", self.drag_release)
-        self.display_all_umls()
+    def start(self, klassen={}):
+        self.display_all_umls(loaded_positions=klassen)
         self.create_references()
         self.draw_all_reference_arrows()
+        self.master.bind("<ButtonPress-1>", self.drag_start)
+        self.master.bind("<ButtonRelease-1>", self.drag_release)
+
+    def load_positions(self):
+        f = filedialog.askopenfilename(filetypes=[("json file", "*.json")])
+        if f != "" and f.split(".")[-1] == "json":
+            print(f)
+            with open(f, "r") as json_file:
+                klassen = json.load(json_file)
+                self.reader = Reader(klassen["path"])
+                self.start(klassen=klassen)
+
+    def save_current_state(self):
+        klassen = {"path": self.reader.path}
+        for uml_klasse in self.uml_klassen:
+            klassen[uml_klasse.klasse.name] = {"x": uml_klasse.x, "y": uml_klasse.y}
+        f = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("json file", "*.json")])
+        with open(f, "w") as json_file:
+            json.dump(klassen, json_file)
 
     # pick folder with filedialog
     def pick_folder(self):
@@ -47,7 +67,7 @@ class View:
             self.start()
 
     # display all umls for the first time
-    def display_all_umls(self):
+    def display_all_umls(self, loaded_positions):
         row = 1
         current_width = 0
         min_row_height = 0
@@ -55,6 +75,11 @@ class View:
         for index, uml in enumerate(self.reader.uml_klassen):
             print(current_width, self.width)
             uml_klasse = UMLKlasse(uml, self.canvas)
+            self.uml_klassen.append(uml_klasse)
+            if uml.name in loaded_positions:
+                print(uml.name, " ist gespeichert", uml.reference_names)
+                self.display_uml(uml_klasse, loaded_positions[uml.name]["x"], loaded_positions[uml.name]["y"])
+                continue
             print("w", uml_klasse.width)
             if current_width + uml_klasse.width > self.width:
                 row += 1
@@ -62,7 +87,6 @@ class View:
                 current_height += min_row_height
                 min_row_height = 0
             current_width += uml_klasse.width / 2
-            self.uml_klassen.append(uml_klasse)
             self.display_uml(uml_klasse, current_width, current_height)
             current_width += uml_klasse.width / 2 + 2
             if uml_klasse.height > min_row_height:
@@ -145,6 +169,3 @@ class View:
                 if uml_klasse2.klasse.name == uml_klasse.klasse.motherclass:
                     # save in current class
                     uml_klasse.motherclass = uml_klasse2
-
-
-
