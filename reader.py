@@ -52,7 +52,7 @@ class Reader:
 
     # format methodname for uml_klasse
     def format_method(self, methodname):
-        new_methodname = methodname.strip()
+        new_methodname = methodname.strip().replace("{", "")
         new_methodname = self.replace_visibility_indicator(new_methodname)
         # remove parantheses and parameters
         new_methodname_without_parameters = new_methodname.split("(")[0] + "( "
