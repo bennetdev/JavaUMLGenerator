@@ -8,10 +8,11 @@ import json
 # Tkinter window to display whole UML-Chart
 class View:
     def __init__(self, master):
-        # span over full screen
+        # get width and height
         self.width = master.winfo_screenwidth()
         self.height = master.winfo_screenheight()
         self.master = master
+        self.master.state("zoomed")
         # save uml_klasse objects for interaction
         self.uml_to_drag = None
         self.uml_klassen = []
