@@ -147,6 +147,4 @@ class View:
                     uml_klasse.motherclass = uml_klasse2
 
 
-root = tk.Tk()
-view = View(root)
-root.mainloop()
+

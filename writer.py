@@ -1,6 +1,7 @@
 from fpdf import FPDF
 from math import floor
 
+# Class to save uml as PDF (Under development, not finished)
 class Writer:
     def __init__(self, classes):
         self.classes = classes
