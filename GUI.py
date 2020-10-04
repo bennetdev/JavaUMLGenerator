@@ -41,22 +41,28 @@ class View:
         self.master.bind("<ButtonPress-1>", self.drag_start)
         self.master.bind("<ButtonRelease-1>", self.drag_release)
 
+    # load json file containing positions
     def load_positions(self):
         f = filedialog.askopenfilename(filetypes=[("json file", "*.json")])
+        # if a folder is chosen (not the case e.g. if canceled) and type is json
         if f != "" and f.split(".")[-1] == "json":
-            print(f)
             with open(f, "r") as json_file:
                 klassen = json.load(json_file)
                 self.reader = Reader(klassen["path"])
+                # start containing dict of positions
                 self.start(klassen=klassen)
 
+    # write positions of current uml_klassen to json file
     def save_current_state(self):
+        # save current path
         klassen = {"path": self.reader.path}
         for uml_klasse in self.uml_klassen:
+            # save name and coords
             klassen[uml_klasse.klasse.name] = {"x": uml_klasse.x, "y": uml_klasse.y}
         f = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("json file", "*.json")])
-        with open(f, "w") as json_file:
-            json.dump(klassen, json_file)
+        if f != "":
+            with open(f, "w") as json_file:
+                json.dump(klassen, json_file)
 
     # pick folder with filedialog
     def pick_folder(self):
